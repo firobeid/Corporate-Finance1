@@ -8,6 +8,7 @@ All rights reserved.
 # This assignement has taught me 10,000 ways how not to let my code work with pandas. Make it simple it comes out elegant.
 import pandas as pd
 import numpy as np
+
 pd.set_option('max_colwidth', 800)
 #Built a main function that calculates, NPV, IRR, Profitability index, payback period and displays pandas of dicounted cash flows(npv_data) and undiscounted cash flows(dfcash)
 def discounting(r, n):# This function will be called from my mother function to discount the cash flows
@@ -69,10 +70,10 @@ print("\nQuestion 4:\n{}\na)The discounted payback period is {} years if the dis
 #Question 5
 npv_a, npv_data_a, irr, dfcash, period, PI = calc_npv(3, -30000, [23000, 13300, 11000], 11 / 100, 0)  
 npv_b, npv_data_b, irr, dfcash, period, PI = calc_npv(3, -30000, [23000, 13300, 11000], 40 / 100, 0)  
-print("\nQuestion 5:\n{}\na) The NPV is ${:,.2f} when the discount rate is 11%.\nb) The NPV is ${:,.2f} when the discount rate is 40%".format(npv_data, npv_a, npv_b))
+print("\nQuestion 5:\n{}\na) The NPV is ${:,.2f} when the discount rate is 11%.\nb) The NPV is ${:,.2f} when the discount rate is 40%".format(npv_data_a, npv_a, npv_b))
 # Question 6
-npv, npv_data, irr, dfcash, period, PI = calc_npv(9, -14000, [3000] * 9, 11 / 100, 1)
-print("\nQuestion 6:\n{}\na) The NPV is ${:,.2f} on the 11% required return.\nb) The IRR of the project is {}%.".format(dfcash, npv, irr)) 
+npv, npv_data_6, irr, dfcash, period, PI = calc_npv(9, -14000, [3000] * 9, 11 / 100, 1)
+print("\nQuestion 6:\n{}\na) The NPV is ${:,.2f} on the 11% required return.\nb) The IRR of the project is {}%.".format(npv_data_6, npv, irr)) 
 # Question7 
 npv, npv_data, irr, dfcash, period, PI = calc_npv(3, -7951, [4300, 3300, 5400], 0 / 100, 1) 
 print("\nQuestion7:\n{}\nThe IRR for the project with the given cash flows is {}%.".format(dfcash, irr))    
@@ -102,8 +103,9 @@ npv, npv_data, irr, dfcash_A, period_A, PI = calc_npv(4, -218744, [29300, 51000,
 npv, npv_data, irr_a, dfcash_B, period_B, PI = calc_npv(4, -14887, [4036, 8737, 13211, 8514], 0 / 100, 2)
 npv_A, npv_data_A, irr_A, dfcash, period_Ad, PI_A = calc_npv(4, -218744, [29300, 51000, 51000, 424000], 6 / 100, 3)
 npv_B, npv_data_B, irr_B, dfcash, period_Bd, PI_B = calc_npv(4, -14887, [4036, 8737, 13211, 8514], 6 / 100, 2)
-cashflow = dfcash_A.merge(dfcash_B[['Cash_Flows']], left_on='Year', right_on='Year') #found through trail and error best way to join the dataframes in one df through their indexes
-print("\nQuestion 11:\n{}\na)The payback period for Project A is {}yrs.\nb)The payback period for Project B is {}yrs.\n{}\n{}\nc) The \
+cashflow = pd.concat([dfcash_A['Cash_Flows'],dfcash_B['Cash_Flows']], axis = 1) #found through trail and error best way to join the dataframes in one df through their indexes
+cashflow.columns = ['Cash Flows A', 'Cash Flows B']
+print("\nQuestion 11:\n{}\na)The payback period for Project A is {}yrs.\nb)The payback period for Project B is {}yrs.\n\n{}\n{}\nc) The \
 discounted payback period for Project A is {}yrs.\nd) The discounted payback period for Project B is {}yrs.\ne) The NPV for project A is ${:,.2f}.\nf) The NPV for project B is ${:,.2f}.\ng) The IRR for project A is {}%.\nh) The IRR for project B is {}%.\
 \ni) The PI for project A is {}.\nj) The PI for project B is {}.".format(cashflow, period_A, period_B, npv_data_A, npv_data_B, period_Ad, period_Bd, npv_A, npv_B, irr_A, irr_B, PI_A, PI_B))
 # Question 12
@@ -149,9 +151,5 @@ print("\nQuestion 5:\n{}\na) The over all net present value for the project is $
 npv, npv_data, irr, dfcash, period, PI = calc_npv(20, -3375000 , [385000] * 20, 9.5754 / 100, 19) 
 print("\nQuestion 6:\n{}\na) The project will be economically feasible at NPV = 0, which is the point at which the company is indifferent and just broke even. The discount rate or IRR will thus be {:,.4f}%.\nb) The breakeven will be\
  after {}, thus taking that into consideration and discounting at 9.5754%, the project will breakeven by a negligible margin in the last year (year 20). Thus the SAP project should not be implemented since it is not feasible.\n\n\n\t\t\t\t\t\t----------END of NPV----------- ".format(npv_data, irr, period))
-import matplotlib.pyplot as plt
-import seaborn as sns 
-npv_data.plot(linewidth = 2, figsize = (16,8), cmap = 'coolwarm')
-npv_data.set_ylim([-20, 20])
-plt.show()
+
 
